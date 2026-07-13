@@ -1406,13 +1406,13 @@
     // are therefore used in the equivalent compat format (without markdown
     // brackets/URLs around the authDomain and storageBucket values).
     const firebaseConfig = {
-        apiKey: "AIzaSyADNnlQIRl2z0hkifGQHoroPJC2NvazAXM",
-        authDomain: "nhd-kutir.firebaseapp.com",
-        projectId: "nhd-kutir",
-        storageBucket: "nhd-kutir.firebasestorage.app",
-        messagingSenderId: "564893753456",
-        appId: "1:564893753456:web:9ccac3f6735c69266b54b5",
-        measurementId: "G-NQRFRBKF3K"
+        apiKey: "AIzaSyCFLAKmLLc9k4m0YVfO0lgEbx9BqGz7Fso",
+        authDomain: "test-kutir-49a87.firebaseapp.com",
+        projectId: "test-kutir-49a87",
+        storageBucket: "test-kutir-49a87.firebasestorage.app",
+        messagingSenderId: "1013086364698",
+        appId: "1:1013086364698:web:b4d2f6092c51143ca91da3",
+        measurementId: "G-SCZWSGEPHK"
     };
 
     // Declare `db` and `auth` up-front as `var` so they are hoisted and
@@ -2472,7 +2472,12 @@
         const roomBody = document.getElementById('roomBody');
         roomBody.innerHTML = '';
         let tenantExpectedCapacity = 0;
+        let totalRent = 0, totalGas = 0, totalWater = 0, totalWaste = 0;
         roomData.sort((a,b) => a.roomNo.localeCompare(b.roomNo, undefined, {numeric: true})).forEach(rm => {
+            totalRent += numberValue(rm.rentAmount);
+            totalGas += numberValue(rm.gasBill);
+            totalWater += numberValue(rm.waterBill);
+            totalWaste += numberValue(rm.wasteBill);
             roomBody.innerHTML += `<tr>
                 <td><b>${escapeHTML(rm.roomNo)}</b></td>
                 <td>${formatCurrency(rm.rentAmount)}</td>
@@ -2486,6 +2491,18 @@
                 </td>
             </tr>`;
         });
+        // Add total row
+        if(roomData.length > 0) {
+            roomBody.innerHTML += `<tr style="font-weight:bold; background:var(--ios-input); border-top: 2px solid var(--card-border);">
+                <td style="font-weight:bold;">${t('totalRow')}</td>
+                <td>${formatCurrency(totalRent)}</td>
+                <td>${formatCurrency(totalGas)}</td>
+                <td>${formatCurrency(totalWater)}</td>
+                <td>${formatCurrency(totalWaste)}</td>
+                <td>-</td>
+                <td class="no-print"></td>
+            </tr>`;
+        }
 
         // 2. Tenants Update
         const tenantBody = document.getElementById('tenantBody');
