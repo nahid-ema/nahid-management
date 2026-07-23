@@ -141,6 +141,11 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html, body {
+            overflow-x: hidden;
+            width: 100%;
+        }
+
         body {
             font-family: 'Outfit', 'Noto Sans Bengali', 'Segoe UI', system-ui, sans-serif;
             background-color: var(--ios-bg);
@@ -156,10 +161,12 @@
 
         .container {
             max-width: 1400px;
+            width: 100%;
             margin: 0 auto;
             display: none;
             position: relative;
             z-index: 1;
+            overflow-x: hidden;
         }
 
         /* ── Auth Screen ─────────────────────────────────────── */
