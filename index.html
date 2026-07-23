@@ -335,6 +335,28 @@
             flex-wrap: wrap;
         }
 
+        /* ── Settings Dropdown ───────────────────────────────── */
+        .settings-dropdown { position: relative; display: inline-block; }
+        .settings-menu-content {
+            display: none; position: absolute; right: 0; top: 44px;
+            background: var(--ios-card); min-width: 220px;
+            box-shadow: var(--shadow-lg); border-radius: 14px;
+            border: 1px solid var(--card-border); z-index: 100;
+            overflow: hidden;
+            animation: slideUp 0.2s ease-out;
+        }
+        .settings-menu-content.show { display: flex; flex-direction: column; }
+        .settings-menu-item {
+            background: transparent; color: var(--text-main);
+            padding: 14px 18px; border: none; border-bottom: 1px solid var(--card-border);
+            text-align: left; font-size: 14.5px; font-weight: 500; font-family: inherit;
+            cursor: pointer; transition: background 0.2s;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .settings-menu-item:last-child { border-bottom: none; }
+        .settings-menu-item:hover { background: var(--purple-50); }
+        body.dark-theme .settings-menu-item:hover { background: rgba(102,77,229,0.1); }
+
         /* ── Filter Bar ──────────────────────────────────────── */
         .filter-container {
             display: flex;
@@ -1268,7 +1290,8 @@
         }
 
         /* ── Extra Polish ────────────────────────────────────── */
-        .header-section, .brief-card, .ios-card-box { position: relative; z-index: 1; }
+        .brief-card, .ios-card-box { position: relative; z-index: 1; }
+        .header-section { position: relative; z-index: 100; }
 
         /* Staggered table row entrance */
         tr:nth-child(1) td  { animation-delay: 0.02s; }
@@ -1454,16 +1477,20 @@
 
 <div class="container" id="mainContainer">
     <div class="header-section">
-        <h1 id="mainTitle">নাহিদ কুটির 🏠</h1>
-        <div class="header-buttons no-print">
-            <button onclick="triggerBackup()" id="backupBtn" class="lang-btn" style="background:var(--ios-orange); color:var(--text-main);">📥 ব্যাকআপ</button>
-            <button onclick="document.getElementById('backupInput').click()" id="restoreBtn" class="lang-btn" style="background:var(--accent-blue); color:white;">📤 রিস্টোর</button>
-            <input type="file" id="backupInput" style="display:none;" accept=".json" onchange="handleRestore(event)">
-            
-            <button onclick="toggleLanguage()" id="langBtn" class="lang-btn active">EN</button>
-            <button onclick="toggleTheme()" id="themeBtn" class="theme-btn">☀️</button>
-            <button onclick="handleLogout()" id="logoutBtn" class="lang-btn" style="background:var(--ios-red); color:white;">✕</button>
+        <div style="display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+            <h1 id="mainTitle" style="margin:0; width:auto;">নাহিদ কুটির 🏠</h1>
+            <div class="settings-dropdown no-print">
+                <button onclick="toggleSettingsMenu()" id="settingsBtn" class="lang-btn" style="padding:0 12px; min-height: 38px;">⚙️ <span id="settingsText">সেটিংস</span></button>
+                <div id="settingsMenu" class="settings-menu-content">
+                    <button onclick="triggerBackup()" id="backupBtn" class="settings-menu-item">📥 ব্যাকআপ (Backup)</button>
+                    <button onclick="document.getElementById('backupInput').click()" id="restoreBtn" class="settings-menu-item">📤 রিস্টোর (Restore)</button>
+                    <button onclick="toggleLanguage()" id="langBtn" class="settings-menu-item">🌐 EN (Switch)</button>
+                    <button onclick="toggleTheme()" id="themeBtn" class="settings-menu-item">☀️ থিম (Theme)</button>
+                    <button onclick="handleLogout()" id="logoutBtn" class="settings-menu-item" style="color:var(--ios-red);">✕ লগআউট (Logout)</button>
+                </div>
+            </div>
         </div>
+        <input type="file" id="backupInput" style="display:none;" accept=".json" onchange="handleRestore(event)">
     </div>
 
     <div class="filter-container no-print">
@@ -2254,7 +2281,7 @@
         if(thUnpaidAction) thUnpaidAction.textContent = currentLang === 'bn' ? 'যোগাযোগ' : 'Action';
 
         document.getElementById('printBtn').textContent = t('printBtn');
-        document.getElementById('langBtn').textContent = currentLang === 'bn' ? 'EN' : 'বাং';
+        document.getElementById('langBtn').innerHTML = currentLang === 'bn' ? '🌐 EN (Switch)' : '🌐 বাং (পরিবর্তন)';
 
         /* --- Expense + Shop Dues labels --- */
         const _set = (id, val, prop='textContent') => { const el = document.getElementById(id); if (el) el[prop] = val; };
@@ -2480,8 +2507,21 @@
     function toggleTheme() {
         document.body.classList.toggle('dark-theme');
         const isDark = document.body.classList.contains('dark-theme');
-        document.getElementById('themeBtn').textContent = isDark ? '🌙' : '☀️';
+        document.getElementById('themeBtn').innerHTML = isDark ? '🌙 থিম (Theme)' : '☀️ থিম (Theme)';
     }
+
+    function toggleSettingsMenu() {
+        document.getElementById("settingsMenu").classList.toggle("show");
+    }
+    
+    window.addEventListener('click', function(event) {
+        if (!event.target.closest('.settings-dropdown')) {
+            var menu = document.getElementById("settingsMenu");
+            if (menu && menu.classList.contains('show')) {
+                menu.classList.remove('show');
+            }
+        }
+    });
 
     // Normalize legacy/partial Firestore values before they reach the UI.
     // This prevents a missing amount from breaking renderApp with
