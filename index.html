@@ -408,8 +408,8 @@
             overflow-y: hidden;
             -webkit-overflow-scrolling: touch;
             scrollbar-width: none;
-            padding: 4px 2px 14px;
-            margin-bottom: 20px;
+            padding: 12px 2px 24px;
+            margin-bottom: 6px;
             border-bottom: 1px solid var(--card-border);
             scroll-snap-type: x proximity;
             align-items: stretch;
@@ -1066,7 +1066,8 @@
                 margin-left: -2px; margin-right: -2px;
                 background: var(--ios-bg);
                 gap: 7px;
-                padding: 5px 2px 11px;
+                padding: 10px 2px 22px;
+                margin-bottom: 6px;
             }
             body.dark-theme .tab-bar {
                 background: var(--ios-bg);
@@ -1100,11 +1101,20 @@
 
             /* General Tables: Shrink to fit screen perfectly */
             table { min-width: 0 !important; width: 100%; table-layout: auto; }
-            th, td { 
-                padding: 8px 4px; 
-                font-size: 11px; 
+            th { 
+                padding: 6px 2px; 
+                font-size: 9.5px; 
                 white-space: normal !important; 
-                word-break: break-word; 
+                word-break: normal; 
+                letter-spacing: -0.3px;
+                line-height: 1.1;
+            }
+            td { 
+                padding: 8px 2px; 
+                font-size: 10.5px; 
+                white-space: normal !important; 
+                word-break: normal; 
+                overflow-wrap: anywhere;
             }
             .table-responsive { overflow-x: auto !important; }
 
@@ -1172,7 +1182,7 @@
 
         /* ── Responsive: Tablet (768–959px) ──────────────────── */
         @media (min-width: 768px) and (max-width: 959px) {
-            .tab-bar { gap: 9px; padding-bottom: 13px; }
+            .tab-bar { gap: 9px; padding-bottom: 24px; margin-bottom: 6px; }
             .tab-btn { flex-basis: 126px; width: 126px; min-width: 126px; height: 40px; font-size: 13px; }
             .tab-btn .tab-label { max-width: 82px; }
         }
@@ -2008,7 +2018,7 @@
             dueStatus: "⚠️",
             dueSuffix: "বকেয়া",
             deleteConfirm: "এটি ডিলিট করতে নিশ্চিত?",
-            currencySymbol: "৳ ",
+            currencySymbol: "৳\u00A0",
             roomText: "রুম",
             totalText: "সর্বমোট তালিকা",
             cancelBtn: "বাতিল",
@@ -2112,7 +2122,7 @@
             dueStatus: "⚠️",
             dueSuffix: "Due",
             deleteConfirm: "Delete this item?",
-            currencySymbol: "৳ ",
+            currencySymbol: "৳\u00A0",
             roomText: "Room",
             totalText: "Total List",
             cancelBtn: "Cancel",
