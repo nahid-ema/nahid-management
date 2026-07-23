@@ -1078,9 +1078,19 @@
             .form-actions { display: grid; grid-template-columns: 1fr; gap: 8px; }
             .form-actions .ios-btn { width: 100%; margin-top: 0; }
 
-            /* Card table: responsive stacked rows */
+            /* General Tables: Shrink to fit screen perfectly */
+            table { min-width: 0 !important; width: 100%; table-layout: fixed; }
+            th, td { 
+                padding: 8px 4px; 
+                font-size: 11px; 
+                white-space: normal !important; 
+                word-break: break-word; 
+            }
+            .table-responsive { overflow-x: hidden !important; }
+
+            /* Card table: responsive stacked rows (Only for rent table) */
             .rent-table-responsive { padding: 4px; }
-            .rent-table-responsive table { min-width: 0; }
+            .rent-table-responsive table { min-width: 0; display: block; }
             .rent-table-responsive thead { display: none; }
             .rent-table-responsive table,
             .rent-table-responsive tbody,
