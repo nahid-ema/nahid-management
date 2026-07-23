@@ -496,68 +496,7 @@
 
         .section-hidden { display: none !important; }
 
-        /* ── Dashboard Cards ─────────────────────────────────── */
-        .dash-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 12px;
-            margin-bottom: 22px;
-        }
 
-        .dash-card {
-            background: var(--grad-card);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            padding: 18px 14px;
-            border-radius: 18px;
-            text-align: center;
-            border: 1px solid var(--card-border);
-            box-shadow: var(--shadow-sm);
-            transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1), box-shadow 0.25s ease;
-            animation: countUp 0.5s ease both;
-            position: relative;
-            overflow: hidden;
-        }
-
-        .dash-card::before {
-            content: '';
-            position: absolute;
-            top: -30px; right: -20px;
-            width: 80px; height: 80px;
-            border-radius: 50%;
-            background: var(--grad-primary);
-            opacity: 0.07;
-            transition: opacity 0.3s ease;
-        }
-
-        .dash-card:hover {
-            transform: translateY(-4px);
-            box-shadow: var(--shadow-md), 0 0 0 1px var(--card-border);
-        }
-        .dash-card:hover::before { opacity: 0.14; }
-
-        .dash-card h4 {
-            margin: 0 0 8px 0;
-            font-size: 10.5px;
-            text-transform: uppercase;
-            letter-spacing: 0.7px;
-            font-weight: 700;
-            color: var(--text-muted);
-        }
-
-        .dash-card p {
-            margin: 0;
-            font-size: 18px;
-            font-weight: 800;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
-            background: var(--grad-primary);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            font-variant-numeric: tabular-nums;
-        }
 
         /* ── Total Brief Card ────────────────────────────────── */
         .brief-card {
@@ -1406,12 +1345,10 @@
             b.setAttribute('tabindex', isActive ? '0' : '-1');
         }
 
-        // Brief tab shows brief + dashboard tiles; every other tab hides them
+        // Brief tab shows brief; every other tab hides it
         var showBrief = (tab === 'brief');
         var brief = document.getElementById('briefSection');
         if (brief) brief.classList.toggle('section-hidden', !showBrief);
-        var dash = document.querySelector('[data-section="dashboard"]');
-        if (dash) dash.classList.toggle('section-hidden', !showBrief);
 
         // Every other section shows ONLY when its tab is active
         for (var j = 0; j < CARD_TABS.length; j++) {
@@ -1560,13 +1497,7 @@
         </div>
     </div>
 
-    <div class="dash-grid" data-section="dashboard">
-        <div class="dash-card"><h4 style="color:var(--accent-blue);" id="rentLabel">মোট ভাড়া</h4><p id="d-rent">৳ 0</p></div>
-        <div class="dash-card"><h4 style="color:var(--ios-green);" id="incomeLabel">মোট আদায়</h4><p id="d-income">৳ 0</p></div>
-        <div class="dash-card"><h4 style="color:var(--ios-red);" id="dueLabel">মোট বকেয়া</h4><p id="d-due">৳ 0</p></div>
-        <div class="dash-card"><h4 style="color:var(--ios-red);" id="expenseLabel">মোট খরচ</h4><p id="d-expense">৳ 0</p></div>
-        <div class="dash-card"><h4 style="color:var(--ios-red);" id="dokanLabel">মোট দোকান বাকি</h4><p id="d-dokan">৳ 0</p></div>
-    </div>
+
 
     <div class="section-split" id="roomsTenantsSplit">
         <div class="ios-card-box" id="roomCard" data-section="rooms">
@@ -2228,9 +2159,7 @@
     function updateAllText() {
         document.getElementById('mainTitle').textContent = t('mainTitle');
         document.getElementById('yearAllOpt').textContent = t('yearAllOpt');
-        document.getElementById('rentLabel').textContent = t('rentLabel');
-        document.getElementById('incomeLabel').textContent = t('incomeLabel');
-        document.getElementById('dueLabel').textContent = t('dueLabel');
+
         document.getElementById('backupBtn').textContent = currentLang === 'bn' ? '📥 ব্যাকআপ' : '📥 Backup';
         document.getElementById('restoreBtn').textContent = currentLang === 'bn' ? '📤 রিস্টোর' : '📤 Restore';
         
@@ -2830,9 +2759,7 @@
         let phone = item.phone.trim().replace(/[^0-9]/g, '');
         if (phone.startsWith('0')) { phone = '88' + phone; }
         
-        let message = currentLang === 'bn' ? 
-            `আসসালামু আলাইকুম/নমস্কার ${item.tenant} সাহেব, নাহিদ কুটির (রুম নং: ${item.room}) থেকে জানানো যাচ্ছে যে আপনার বর্তমান বকেয়া ${formatCurrency(item.due)}। অনুগ্রহ করে দ্রুত পরিশোধ করুন। ধন্যবাদ!` :
-            `Hello ${item.tenant}, this is a reminder from Nahid Kutir (Room: ${item.room}). Your current due is ${formatCurrency(item.due)}. Please process the payment soon. Thank you!`;
+        let message = `আসসালামু আলাইকুম/নমস্কার ${item.tenant} সাহেব, নাহিদ কুটির (রুম নং: ${item.room}) থেকে জানানো যাচ্ছে যে আপনার বর্তমান বকেয়া ${formatCurrency(item.due)}। অনুগ্রহ করে দ্রুত পরিশোধ করুন। ধন্যবাদ!`;
         
         window.open(`https://wa.me/${phone}?text=${encodeURIComponent(message)}`, '_blank');
     }
@@ -2841,9 +2768,7 @@
         if (amount <= 0) return;
         let cleanPhone = phone.trim().replace(/[^0-9]/g, '');
         
-        let message = currentLang === 'bn' ? 
-            `আসসালামু আলাইকুম ${name} সাহেব, নাহিদ কুটির (রুম নং: ${room}) থেকে জানানো যাচ্ছে যে আপনার চলতি মাসের মোট অনাদায়ী ভাড়া ${formatCurrency(amount)}। অনুগ্রহ করে দ্রুত পরিশোধ করুন। ধন্যবাদ!` :
-            `Hello ${name}, this is a reminder from Nahid Kutir (Room: ${room}). Your unpaid rent for this month is ${formatCurrency(amount)}. Please settle it soon. Thank you!`;
+        let message = `আসসালামু আলাইকুম ${name} সাহেব, নাহিদ কুটির (রুম নং: ${room}) থেকে জানানো যাচ্ছে যে আপনার চলতি মাসের মোট অনাদায়ী ভাড়া ${formatCurrency(amount)}। অনুগ্রহ করে দ্রুত পরিশোধ করুন। ধন্যবাদ!`;
         
         if (type === 'sms') {
             window.location.href = `sms:${cleanPhone}?body=${encodeURIComponent(message)}`;
@@ -2976,9 +2901,7 @@
         
         let totalDue = displayedExpected - totalIncome;
         
-        document.getElementById('d-rent').innerText = formatCurrency(displayedExpected);
-        document.getElementById('d-income').innerText = formatCurrency(totalIncome);
-        document.getElementById('d-due').innerText = formatCurrency(totalDue);
+
 
         // --- 4. UNPAID ROOMS LOGIC ---
         const unpaidBody = document.getElementById('unpaidBody');
@@ -3087,7 +3010,7 @@
                 </tr>`;
             }
             expBody.innerHTML = expHtml;
-            document.getElementById('d-expense').innerText = formatCurrency(totalExp);
+
         }
 
         // Shop Dues (dokanBaki)
@@ -3117,7 +3040,7 @@
                 </tr>`;
             }
             dokBody.innerHTML = dokHtml;
-            document.getElementById('d-dokan').innerText = formatCurrency(totalDok);
+
         }
 
         /* ═════════ 6. TOTAL BRIEF (মোট সারসংক্ষেপ) ═════════ */
